@@ -1,0 +1,10 @@
+#open teminal in same directory as app.py and run a command "pip install -r requirements.txt"
+opencv-python
+fer
+openai-whisper
+whisper-asr
+pydub
+numpy
+language_tool_python
+Flask
+moviepy==1.0.3

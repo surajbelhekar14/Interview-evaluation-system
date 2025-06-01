@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Ended</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6; /* Light background from combine.html */
+            color: #333;
+            line-height: 1.7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 30px;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .thank-you-container {
+            background-color: #fff;
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+            text-align: center;
+            max-width: 600px;
+            width: 95%;
+        }
+
+        h2 {
+            font-family: 'Roboto Slab', serif; /* Similar to subtitle font */
+            font-size: 3.2em;
+            color: #34495e; /* Dark heading color */
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 1.15em;
+            color: #555;
+            margin-bottom: 35px;
+        }
+
+        .button {
+            background-color: #5e8c85; /* Footer background from combine.html */
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #4c7570;
+        }
+    </style>
+</head>
+<body>
+    <div class="thank-you-container">
+        <h2>Thank You, {{ candidate_name }}!</h2>
+        <p>Your interview session has now concluded.</p>
+        <form method="POST" action="{{ url_for('calculate_confidence') }}">
+            <button type="submit" class="button">Get Confidence Score</button>
+        </form>
+    </div>
+</body>
+</html>

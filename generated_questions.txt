@@ -1,0 +1,37 @@
+Shubham Jadhav
+
+**Basic Technical Interview Questions:**
+
+* Explain the difference between `==` and `===` in JavaScript.
+* Describe your experience with SQL joins.  Give an example of when you'd use a LEFT JOIN.
+* What are the advantages and disadvantages of using MongoDB over MySQL?
+* Explain the concept of Object-Oriented Programming (OOP) and its principles.
+* Describe your experience with React.js and its component lifecycle.
+* How do you handle errors in your JavaScript code?
+* What is the difference between HTML and CSS?
+* What is REST API and how have you used it in your projects?
+* Explain your experience with Node.js and Express.js.
+* How would you approach building a scalable web application?
+
+
+**Advanced Technical Interview Questions:**
+
+* Design a database schema for a social media platform.  Consider scalability and data integrity.
+* Discuss your experience with asynchronous programming in JavaScript and how you handle concurrency issues.
+* Explain how you would optimize a slow-running SQL query.
+* How would you implement user authentication and authorization in a Node.js application?
+* Explain your understanding of different NoSQL database models (e.g., document, key-value, graph). When would you choose one over another?
+* Describe your experience with version control using Git.  Give examples of common Git commands.
+* How would you design a system for handling real-time updates in a web application?
+* How would you build a robust error handling mechanism for your web applications, including logging and monitoring?
+* Describe your approach to testing your code. What types of testing have you used?
+* Discuss your experience with deploying and maintaining applications in a cloud environment (e.g., AWS, Azure, GCP).
+
+
+**HR Interview Questions:**
+
+* Tell me about a challenging project you worked on and how you overcame the challenges.  Focus on your role in the *PINSPIRE* or *Web gym buddySHOPPER* projects.
+* Describe your experience as Secretary at the Computer Society of India and Technical Head at COMPSA. What did you learn from these roles?
+* Based on your resume, you've completed several online courses.  How have these courses helped you improve your skills and what are your goals for continued learning?
+* Your resume shows participation in multiple hackathons.  Describe your experience in one of them, highlighting your contributions and what you learned.
+* Your resume highlights your involvement in several projects. Can you describe a situation where you had to work collaboratively with a team member who had a different approach to problem-solving? How did you manage the situation?

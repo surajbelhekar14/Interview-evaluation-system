@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interview Helper - Ace Your Next Interview</title>
+
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base styles */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden; /* Prevent horizontal scrollbar during animations */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #1e272e;
+            color: #f5f6fa;
+        }
+
+        body.dark-mode .banner {
+            background-color: #34ace0;
+            color: #222f3d;
+        }
+
+        body.dark-mode .title {
+            color: #f5f6fa;
+        }
+
+        body.dark-mode .subtitle {
+            color: #ced6e0;
+        }
+
+        body.dark-mode .description {
+            color: #d2dae2;
+        }
+
+        body.dark-mode .contents-wrapper {
+            background-color: #222f3d;
+        }
+
+        body.dark-mode .container {
+            background-color: #2f3640;
+        }
+
+        body.dark-mode .content-text h1 {
+            color: #f5f6fa;
+        }
+
+        body.dark-mode .content-text li {
+            color: #d2dae2;
+        }
+
+        body.dark-mode .number-circle {
+            background-color: #34ace0;
+            color: #222f3d;
+        }
+
+        body.dark-mode .upload-wrapper {
+            background-color: #2f3640;
+        }
+
+        body.dark-mode .upload-form {
+            background-color: #222f3d;
+        }
+
+        body.dark-mode .upload-form h2 {
+            color: #f5f6fa;
+        }
+
+        body.dark-mode .upload-form p {
+            color: #d2dae2;
+        }
+
+        body.dark-mode footer {
+            background-color: #2c3e50;
+            color: #f5f6fa;
+        }
+
+        /* Creative Dark/Light Mode Button */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            z-index: 100;
+        }
+
+        .dark-mode-toggle svg {
+            width: 30px;
+            height: 30px;
+            fill: #555; /* Default sun color */
+            transition: fill 0.3s ease;
+        }
+
+        body.dark-mode .dark-mode-toggle svg {
+            fill: #f5f6fa; /* Moon color in dark mode */
+        }
+
+        /* Utility class for centering content */
+        .center {
+            text-align: center;
+        }
+
+        /* Main container */
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 30px;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        body.loaded .main-container {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .image-section, .text-section {
+            flex: 1 1 450px;
+            max-width: 550px;
+            box-sizing: border-box;
+        }
+
+        .image-section {
+            text-align: center;
+            animation: slideInLeft 0.7s ease-out;
+            opacity: 0;
+            animation-fill-mode: both;
+        }
+
+        body.loaded .image-section {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .illustration {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-radius: 10px;
+        }
+
+        .text-section {
+            padding: 20px;
+            animation: slideInRight 0.7s ease-out 0.2s;
+            opacity: 0;
+            animation-fill-mode: both;
+        }
+
+        body.loaded .text-section {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .banner {
+            background-color: #e6a756;
+            color: #fff;
+            padding: 10px 20px;
+            display: inline-block;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-radius: 8px;
+            letter-spacing: 0.6px;
+            animation: pulse 1.6s ease-in-out infinite alternate;
+        }
+
+        .title-wrapper {
+            margin-bottom: 35px;
+        }
+
+        .title {
+            font-size: 4.2em;
+            margin: 0;
+            color: #2c3e50;
+            font-weight: 700;
+            line-height: 1.1;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out 0.4s, transform 0.5s ease-out 0.4s;
+        }
+
+        body.loaded .title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .subtitle {
+            font-family: 'Roboto Slab', serif;
+            font-size: 2.8em;
+            margin: -12px 0 0 0;
+            color: #7f8c8d;
+            font-weight: 400;
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.5s ease-out 0.6s, transform 0.5s ease-out 0.6s;
+        }
+
+        body.loaded .subtitle {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .description {
+            font-size: 1.2em;
+            margin-bottom: 45px;
+            color: #555;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.5s ease-out 0.8s, transform 0.5s ease-out 0.8s;
+        }
+
+        body.loaded .description {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Contents section */
+        .contents-wrapper {
+            padding: 90px 30px;
+            background-color: #fff;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05), 0 5px 20px rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out 0.2s, transform 0.6s ease-out 0.2s;
+        }
+
+        body.loaded .contents-wrapper {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px;
+            box-sizing: border-box;
+            align-items: center;
+            border-radius: 16px;
+            background-color: #f9f9f9;
+        }
+
+        .content-text {
+            flex: 1 1 45%;
+            box-sizing: border-box;
+            padding: 40px;
+        }
+
+        .content-text h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.6em;
+            margin-top: 0;
+            margin-bottom: 35px;
+            font-weight: 700;
+            line-height: 1.2;
+            text-align: left;
+            color: #34495e;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.5s ease-out 0.4s, transform 0.5s ease-out 0.4s;
+        }
+
+        body.loaded .content-text h1 {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .content-text ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        .content-text li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 1.15em;
+            font-weight: 600;
+            color: #4a4a4a;
+        }
+
+        .content-text li:nth-child(1) { --delay: 0.1s; }
+        .content-text li:nth-child(2) { --delay: 0.2s; }
+        .content-text li:nth-child(3) { --delay: 0.3s; }
+        .content-text li:nth-child(4) { --delay: 0.4s; }
+
+        .number-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: #e6a756;
+            color: #fff;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 25px;
+            font-size: 1.1em;
+            flex-shrink: 0;
+            animation: zoomIn 0.6s ease-out 0.6s;
+            opacity: 0;
+            animation-fill-mode: both;
+        }
+
+        body.loaded .number-circle {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .image-placeholder {
+            flex: 1 1 45%;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.6s ease-out 0.4s, transform 0.6s ease-out 0.4s;
+        }
+
+        body.loaded .image-placeholder {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .image-placeholder img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+            max-height: 450px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.07);
+        }
+
+        /* Resume Upload Section - Centered */
+        .upload-wrapper {
+            display: flex;
+            justify-content: center; /* Center the content horizontally */
+            padding: 90px 30px;
+            background-color: #f9f9f9;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out 0.4s, transform 0.6s ease-out 0.4s;
+        }
+
+        body.loaded .upload-wrapper {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .upload-form {
+            max-width: 750px;
+            background-color: #fff;
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 0 35px rgba(0,0,0,0.15);
+            text-align: center;
+            width: 100%; /* Ensure it takes full width of the wrapper for centering to work well */
+        }
+
+        .upload-form h2 {
+            font-size: 2.8em;
+            margin-bottom: 35px;
+            color: #34495e;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease-out 0.6s, transform 0.5s ease-out 0.6s;
+        }
+
+        body.loaded .upload-form h2 {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .upload-form p { /* Style the paragraph above the form */
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out 0.8s, transform 0.5s ease-out 0.8s;
+        }
+
+        body.loaded .upload-form p {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .upload-form input[type="file"] {
+            font-size: 1.2em;
+            padding: 15px;
+            margin: 30px 0;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-sizing: border-box;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.5s ease-out 1s, transform 0.5s ease-out 1s;
+        }
+
+        body.loaded .upload-form input[type="file"] {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .upload-form input[type="submit"] {
+            background-color: #e6a756;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.2em;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out,
+            transform 0.2s ease-in-out;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: 
+            0.5s ease-out 1.2s, transform 0.5s ease-out 1.2s;
+        }
+
+        body.loaded .upload-form input[type="submit"] {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .upload-form input[type="submit"]:hover {
+            background-color: #d3913d;
+            transform: scale(1.02);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #5e8c85;
+            color: #fff;
+            padding: 25px 40px;
+            text-align: center;
+            font-weight: 500;
+            margin-top: 70px;
+            border-radius: 0 0 16px 16px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out 0.6s, transform 0.6s ease-out 0.6s;
+        }
+
+        body.loaded footer {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Screen size restriction styles */
+        .unsupported-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-size: 1.5em;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .unsupported-screen strong {
+            font-size: 1.2em;
+            color: #e6a756;
+            margin-bottom: 10px;
+            animation: pulse 1.5s ease-in-out infinite alternate; /* Pulsating error text */
+        }
+
+        /* Keyframes for animations */
+        @keyframes slideInLeft {
+            from { transform: translateX(-80px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(80px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+    </style>
+</head>
+<body class="">
+    <button class="dark-mode-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 3a9 9 0 0 1 9 9 9 9 0 1 1-9 9 9 9 0 0 1-9-9 9 9 0 0 1 9-9m0 14a5 5 0 0 0 5-5 5 5 0 0 0-5-5 5 5 0 0 0-5 5 5 5 0 0 0 5 5z"/>
+        </svg>
+    </button>
+
+    <div class="unsupported-screen">
+        <strong>Unsupported Screen Size</strong>
+        <p>This website is designed for laptop or desktop screens for the best experience.</p>
+        <p>Please use a larger display to access the full features.</p>
+    </div>
+
+    <main class="main-container">
+        <section class="image-section">
+            <img src="{{ url_for('static', filename='home.jpg') }}" alt="Interview Preparation Illustration" class="illustration" />
+        </section>
+        <section class="text-section center">
+            <div class="banner">Boost Your Interview Confidence!</div>
+            <div class="title-wrapper">
+                <h1 class="title">Ace Your Interview</h1>
+                <h2 class="subtitle">With Our AI Helper</h2>
+            </div>
+            <p class="description">
+                Preparing for an interview tomorrow? No worries! Our AI-powered tool helps you understand your strengths and weaknesses, ensuring you perform your best.
+            </p>
+        </section>
+    </main>
+
+    <div class="contents-wrapper">
+        <div class="container">
+            <div class="content-text">
+                <h1>Key Features</h1>
+                <ul>
+                    <li><span class="number-circle">01</span> RESUME-BASED QUESTION GENERATION</li>
+                    <li><span class="number-circle">02</span> REAL-TIME VOCAL CONFIDENCE ANALYSIS</li>
+                    <li><span class="number-circle">03</span> FACIAL EXPRESSION CONFIDENCE FEEDBACK</li>
+                    <li><span class="number-circle">04</span> AI-POWERED ANSWER EVALUATION</li>
+                </ul>
+            </div>
+            <div class="image-placeholder">
+                <img src="{{ url_for('static', filename='page2.jpg') }}" alt="Key Features Checklist" />
+            </div>
+        </div>
+    </div>
+
+    <div class="upload-wrapper">
+        <div class="upload-form">
+            <h2>Kickstart Your Preparation</h2>
+            <p>Upload your resume to personalize your interview practice.</p>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="resume" accept=".pdf,.csv" required><br><br>
+                <input type="submit" value="Upload Resume">
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Interview Helper - Empowering Your Success
+    </footer>
+
+    <script>
+        // Dark/Light Mode Toggle
+        const darkModeToggle = document.querySelector('.dark-mode-toggle');
+        const body = document.body;
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            // Store the theme preference
+            localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        // Check for saved theme preference on load
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+        }
+
+        // Function to check screen size
+        function checkScreenSize() {
+            if (window.innerWidth < 1000) {
+                document.body.classList.remove('loaded');
+                document.querySelector('.unsupported-screen').style.display = 'flex';
+                document.querySelector('.main-container').style.display = 'none';
+                document.querySelector('.contents-wrapper').style.display = 'none';
+                document.querySelector('.upload-wrapper').style.display = 'none';
+                document.querySelector('footer').style.display = 'none';
+                document.querySelector('.dark-mode-toggle').style.display = 'none';
+            } else {
+                document.querySelector('.unsupported-screen').style.display = 'none';
+                document.querySelector('.main-container').style.display = 'flex';
+                document.querySelector('.contents-wrapper').style.display = 'block';
+                document.querySelector('.upload-wrapper').style.display = 'flex';
+                document.querySelector('footer').style.display = 'block';
+                document.querySelector('.dark-mode-toggle').style.display = 'block';
+                document.body.classList.add('loaded');
+            }
+        }
+
+        // Check on initial load and resize
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+
+        // Add loaded class on window load to trigger animations (except Key Features now)
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+</html>

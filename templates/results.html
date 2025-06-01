@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Results</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6; /* Light background from combine.html */
+            color: #333;
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 30px;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .results-container {
+            background-color: #fff;
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+            text-align: center;
+            max-width: 600px;
+            width: 95%;
+        }
+
+        h2 {
+            font-family: 'Roboto Slab', serif;  /* Similar to subtitles */
+            font-size: 3.2em;
+            color: #34495e;  /* Dark heading color */
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 1.15em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .results-box {
+            background-color: #f9f9f9; /* Light container background */
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: left;
+            font-size: 1.1em;
+            line-height: 1.8;
+            border: 1px solid #eee;
+        }
+
+        .results-box h3 {
+            font-size: 1.5em;
+            color: #e6a756;  /* Accent color */
+            margin-bottom: 15px;
+            font-family: 'Roboto Slab', serif; /* Use Roboto Slab for headings */
+            font-weight: 600;
+        }
+
+        .results-box p {
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="results-container">
+        <h2>Results for {{ candidate_name }}</h2>
+        <div class="results-box">
+            <h3>Confidence Scores</h3>
+            <p>Speaking Confidence: <strong>{{ speaking_confidence }}</strong> / 100</p>
+            <p>Facial Confidence: <strong>{{ facial_confidence }}</strong> / 100</p>
+            <p>Grammar Score: <strong>{{ grammar_score }}</strong> / 100</p>
+        </div>
+    </div>
+</body>
+</html>
