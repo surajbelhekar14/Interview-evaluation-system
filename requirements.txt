@@ -2,7 +2,6 @@
 opencv-python
 fer
 openai-whisper
-whisper-asr
 pydub
 numpy
 language_tool_python
