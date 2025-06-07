@@ -8,11 +8,12 @@ import whisper
 from pydub import AudioSegment
 import language_tool_python
 from collections import defaultdict
-import io  # Import the io module
+import io
+from concurrent.futures import ThreadPoolExecutor # Import ThreadPoolExecutor
 
 app = Flask(__name__)
 app.secret_key = b'\x1c\x9a\x85\x01\x9b\x1d\xee\xa3\x16\x08\x9c\xa6\x8e\x19\x7d\x0f\x8f\xeb\x8f\x19\xfa\x99\xcd\x17'
-# ... (rest of your app.py code)
+
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -21,9 +22,22 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 ANSWERS_FOLDER = 'answers_video'
 os.makedirs(ANSWERS_FOLDER, exist_ok=True)
 
-# --- (Helper Functions) ---
-# (Keep these functions as they are)
-def extract_audio_from_video(video_file, output_audio_file="temp_audio.wav"):
+# --- Global Model Loading (for efficiency and thread-safety where applicable) ---
+# Load Whisper model once when the app starts
+global_whisper_model = whisper.load_model("small")
+
+# Load LanguageTool model once when the app starts
+# Note: language_tool_python's LanguageTool can be relatively slow to initialize.
+# While the check method is generally thread-safe, initializing it once is efficient.
+global_language_tool = language_tool_python.LanguageTool('en-US')
+
+# Initialize a ThreadPoolExecutor for concurrent video processing
+# Adjust max_workers based on your system's CPU cores and expected load.
+# A common heuristic is the number of CPU cores or slightly more for I/O-bound tasks.
+executor = ThreadPoolExecutor(max_workers=4)
+
+# --- Helper Functions ---
+def extract_audio_from_video(video_file, output_audio_file):
     try:
         command = [
             'ffmpeg',
@@ -41,7 +55,8 @@ def extract_audio_from_video(video_file, output_audio_file="temp_audio.wav"):
         return None
 
 def transcribe_audio_with_timestamps(audio_file):
-    model = whisper.load_model("small")
+    # Use the globally loaded Whisper model
+    model = global_whisper_model
     audio = AudioSegment.from_wav(audio_file)
     segment_length_ms = 600000
     segments = [audio[i:i + segment_length_ms] for i in range(0, len(audio), segment_length_ms)]
@@ -87,6 +102,9 @@ def analyze_speaking_confidence(transcript_segments):
 
 def analyze_facial_confidence(video_path, window_size=10, confidence_threshold=0.7):
     cap = cv2.VideoCapture(video_path)
+    # Re-initialize FER detector per thread/call. While this incurs overhead,
+    # it's generally safer for libraries that might not be fully thread-safe
+    # or have internal state that's modified during processing.
     detector = FER(mtcnn=True)
     confidence_scores = []
     while True:
@@ -108,7 +126,8 @@ def analyze_facial_confidence(video_path, window_size=10, confidence_threshold=0
     return combined_facial_confidence
 
 def check_grammar(text):
-    tool = language_tool_python.LanguageTool('en-US')
+    # Use the globally loaded LanguageTool instance
+    tool = global_language_tool
     matches = tool.check(text)
     return matches
 
@@ -178,6 +197,30 @@ def generate_questions():
     else:
         return False, process.stderr
 
+# --- New helper function for processing a single video in a thread ---
+def process_single_video(video_file_path):
+    # Generate a unique temporary audio file name for each video processing task
+    audio_file_path = f"temp_audio_{os.path.basename(video_file_path).replace('.', '_')}.wav"
+
+    try:
+        if extract_audio_from_video(video_file_path, audio_file_path):
+            transcript_segments = transcribe_audio_with_timestamps(audio_file_path)
+            speaking_confidence = analyze_speaking_confidence(transcript_segments)
+            facial_confidence = analyze_facial_confidence(video_file_path)
+            full_transcript_text = " ".join(
+                [word_info["word"] for segment in transcript_segments for word_info in segment.get("words", [])])
+            grammar_score = calculate_grammar_score(full_transcript_text)
+            return speaking_confidence, facial_confidence, grammar_score
+        else:
+            print(f"Failed to extract audio from video file: {video_file_path}")
+            return None
+    except Exception as e:
+        print(f"Error processing video {video_file_path}: {e}")
+        return None
+    finally:
+        # Ensure temporary audio file is removed even if errors occur
+        if os.path.exists(audio_file_path):
+            os.remove(audio_file_path)
 
 # --- Flask Routes ---
 
@@ -273,52 +316,49 @@ def save_video(question_number):
 
 @app.route('/end_interview', methods=['POST'])
 def end_interview():
-    # Placeholder for candidate name.  You'll need to get this from your application's session or user authentication.
-    candidate_name = session.get('candidate_name', 'Unknown')  # Get from session, default to "Unknown"
+    candidate_name = session.get('candidate_name', 'Unknown')
     return render_template('thank_you.html', candidate_name=candidate_name)
 
 @app.route('/calculate_confidence', methods=['POST'])
 def calculate_confidence():
     candidate_name = session.get('candidate_name', 'Unknown')
-    # Process the video files and calculate scores.
+    
+    video_files_to_process = [f for f in os.listdir(ANSWERS_FOLDER) if f.endswith('.webm')]
+    if not video_files_to_process:
+        return "No video files found in the answers folder."
+
+    futures = []
+    video_file_paths_to_delete = []
+
+    for video_file_name in video_files_to_process:
+        video_file_path = os.path.join(ANSWERS_FOLDER, video_file_name)
+        video_file_paths_to_delete.append(video_file_path)
+        # Submit each video processing task to the thread pool
+        futures.append(executor.submit(process_single_video, video_file_path))
+
     speaking_confidences = []
     facial_confidences = []
     grammar_scores = []
-    video_files_to_delete = []
 
-    # Get all video files from the ANSWERS_FOLDER
-    video_files = [f for f in os.listdir(ANSWERS_FOLDER) if f.endswith('.webm')]  #get only webm files
-    if not video_files:
-        return "No video files found in the answers folder."
-
-    for video_file_name in video_files:
-        video_file_path = os.path.join(ANSWERS_FOLDER, video_file_name)
-        video_files_to_delete.append(video_file_path) #add video file path in the list to delete later
-
-        audio_file_path = "temp_audio.wav"
-        if extract_audio_from_video(video_file_path, audio_file_path):
-            transcript_segments = transcribe_audio_with_timestamps(audio_file_path)
-            speaking_confidence = analyze_speaking_confidence(transcript_segments)
-            facial_confidence = analyze_facial_confidence(video_file_path)
-            full_transcript_text = " ".join(
-                [word_info["word"] for segment in transcript_segments for word_info in segment.get("words", [])])
-            grammar_score = calculate_grammar_score(full_transcript_text)
-            os.remove(audio_file_path)  # Delete the temp audio file
-            
+    # Collect results as they complete
+    for future in futures:
+        result = future.result() # This will block until the task is complete
+        if result:
+            speaking_confidence, facial_confidence, grammar_score = result
             speaking_confidences.append(speaking_confidence)
             facial_confidences.append(facial_confidence)
             grammar_scores.append(grammar_score)
         else:
-            return f"Failed to extract audio from video file: {video_file_name}"
+            print(f"Skipping a video due to processing failure.")
+
 
     # Delete video files after processing
-    for video_file_path in video_files_to_delete:
+    for video_file_path in video_file_paths_to_delete:
         try:
             os.remove(video_file_path)
             print(f"Deleted video file: {video_file_path}")
         except OSError as e:
             print(f"Error deleting video file {video_file_path}: {e}")
-            # Consider logging this error
 
     # Calculate averages.
     avg_speaking_confidence = np.mean(speaking_confidences) if speaking_confidences else 0

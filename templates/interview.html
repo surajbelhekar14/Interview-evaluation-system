@@ -179,6 +179,7 @@
       <div id="thank-you-message">Thank you for completing the interview!</div>
     </div>
 
+
     <div class="questions-section">
       <h2>Interview Questions</h2>
       <div id="questions-container">
@@ -187,6 +188,7 @@
         {% endfor %}
       </div>
       <button id="next-questions-button" class="button">Next Question</button>
+
     </div>
   </div>
 
@@ -229,6 +231,56 @@
           mimeType: 'video/webm;codecs=vp9,opus'
         });
 
+
+    <div class="questions-section">
+      <h2>Interview Questions</h2>
+      <div id="questions-container">
+        {% for question in questions %}
+          <div class="question" data-question-index="{{ loop.index0 }}">{{ loop.index }}. {{ question }}</div>
+        {% endfor %}
+      </div>
+      <button id="next-questions-button" class="button">Next Question</button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 AI Interview Prep
+  </footer>
+
+  <script>
+    const cameraFeed = document.getElementById('camera-feed');
+    const recordButton = document.getElementById('record-button');
+    const endSessionButton = document.getElementById('end-session-button');
+    const thankYouMessage = document.getElementById('thank-you-message');
+    const questionsContainer = document.getElementById('questions-container');
+    const questionElements = Array.from(questionsContainer.querySelectorAll('.question'));
+    const nextQuestionsButton = document.getElementById('next-questions-button');
+    const totalQuestions = questionElements.length;
+
+    let currentQuestionIndex = 0;
+    let recordingActive = false;
+    let mediaRecorder;
+    let recordedChunks = [];
+    let stream;
+
+    function showCurrentQuestion() {
+      questionElements.forEach((question, index) => {
+        question.classList.toggle('active', index === currentQuestionIndex);
+      });
+
+      if (currentQuestionIndex >= totalQuestions) {
+        nextQuestionsButton.style.display = 'none';
+        recordButton.style.display = 'none';
+        thankYouMessage.style.display = 'block';
+      }
+    }
+
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then(mediaStream => {
+        stream = mediaStream;
+        cameraFeed.srcObject = stream;
+        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9,opus' });
+
         mediaRecorder.ondataavailable = event => {
           if (event.data && event.data.size > 0) {
             recordedChunks.push(event.data);
@@ -270,6 +322,7 @@
               mediaRecorder.stop();
             }
           }
+
         });
 
         nextQuestionsButton.addEventListener('click', () => {
@@ -277,6 +330,7 @@
           showCurrentQuestion();
         });
 
+   
         showCurrentQuestion();
       })
       .catch(error => {
