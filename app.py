@@ -14,6 +14,7 @@ from concurrent.futures import ThreadPoolExecutor # Import ThreadPoolExecutor
 app = Flask(__name__)
 app.secret_key = b'\x1c\x9a\x85\x01\x9b\x1d\xee\xa3\x16\x08\x9c\xa6\x8e\x19\x7d\x0f\x8f\xeb\x8f\x19\xfa\x99\xcd\x17'
 
+
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
