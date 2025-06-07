@@ -1,312 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Interview Questions</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Interview Questions</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet"/>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background-color: #f4f7f6; /* Light background from combine.html */
-            color: #333;
-            line-height: 1.7;
-            display: flex;
-            min-height: 100vh;
-            flex-direction: column;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f7f6;
+      color: #333;
+      line-height: 1.7;
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
-        header {        
-            background-color: #5e8c85;  /* Banner color from combine.html */
-            padding: 25px 30px;
-            text-align: center;
-            color: #fff;
-            font-weight: 600;
-            font-size: 1.8em;
-            letter-spacing: 0.8px;
-        }
+    header {
+      background-color: #5e8c85;
+      padding: 25px 30px;
+      text-align: center;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.8em;
+      letter-spacing: 0.8px;
+    }
 
-        .main-content {
-            display: flex;
-            flex-grow: 1;
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 30px;
-            background-color: #fff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Subtle shadow */
-            border-radius: 16px;
-        }
+    .main-content {
+      display: flex;
+      flex-grow: 1;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-radius: 16px;
+    }
 
-        .video-section {
-            flex: 0 0 400px; /* Fixed width for video section */
-            padding-right: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-sizing: border-box;
-        }
+    .video-section {
+      flex: 0 0 400px;
+      padding-right: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+    }
 
-        #video-container {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            border: 4px solid #5e8c85; /* Footer background from combine.html */
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
+    #video-container {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 4px solid #5e8c85;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
 
-        video {
-            display: block;
-            width: 100%;
-            height: 100%;
-            background-color: black;
-            object-fit: cover;
-        }
+    video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      object-fit: cover;
+    }
 
-        .button { /* General button style */
-            background-color: #5e8c85; /* Footer background from combine.html */
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1em;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-            text-decoration: none; /* To style the link as a button */
-        }
+    .button {
+      background-color: #5e8c85;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+      text-decoration: none;
+    }
 
-        .button:hover {
-            background-color: #4c7570;
-        }
+    .button:hover {
+      background-color: #4c7570;
+    }
 
-        .button-group {
-            display: flex;
-            gap: 15px;
-        }
+    .button-group {
+      display: flex;
+      gap: 15px;
+    }
 
-        .questions-section {
-            flex: 1;
-            padding-left: 30px;
-            border-left: 1px solid #ddd;
-            overflow-y: auto;
-            max-height: 700px;
-            box-sizing: border-box;
-        }
+    .questions-section {
+      flex: 1;
+      padding-left: 30px;
+      border-left: 1px solid #ddd;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
 
-        h2 {
-            font-size: 2.8em;
-            margin-top: 0;
-            margin-bottom: 30px;
-            color: #34495e; /* Dark heading color */
-            font-family: 'Roboto Slab', serif; /* Similar to subtitle font */
-            font-weight: 700;
-            text-align: left;
-        }
+    h2 {
+      font-size: 2.8em;
+      margin-top: 0;
+      margin-bottom: 30px;
+      color: #34495e;
+      font-family: 'Roboto Slab', serif;
+      font-weight: 700;
+      text-align: left;
+    }
 
-        .question {
-            display: none; /* Initially hide all questions */
-            background-color: #f9f9f9; /* Light container background */
-            padding: 15px 20px;
-            border-left: 6px solid #e6a756; /* Accent color */
-            margin-bottom: 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            color: #4a4a4a;
-            line-height: 1.6;
-        }
+    .question {
+      display: none;
+      background-color: #f9f9f9;
+      padding: 15px 20px;
+      border-left: 6px solid #e6a756;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      color: #4a4a4a;
+      line-height: 1.6;
+    }
 
-        .question.active {
-            display: block; /* Show the active questions */
-        }
+    .question.active {
+      display: block;
+    }
 
-        #next-questions-button {
-            background-color: #e6a756; /* Accent color */
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1em;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-            margin-top: 25px;
-        }
+    #next-questions-button {
+      background-color: #e6a756;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+      margin-top: 25px;
+    }
 
-        #next-questions-button:hover {
-            background-color: #d3913d;
-        }
+    #next-questions-button:hover {
+      background-color: #d3913d;
+    }
 
-        #thank-you-message {
-            display: none;
-            text-align: center;
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #27ae60; /* Success color */
-            margin-top: 40px;
-        }
+    #thank-you-message {
+      display: none;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #27ae60;
+      margin-top: 40px;
+    }
 
-        footer {
-            background-color: #5e8c85; /* Footer background from combine.html */
-            color: #fff;
-            padding: 20px 30px;
-            text-align: center;
-            font-weight: 500;
-            margin-top: 40px;
-            border-radius: 0 0 16px 16px;
-        }
-    </style>
+    footer {
+      background-color: #5e8c85;
+      color: #fff;
+      padding: 20px 30px;
+      text-align: center;
+      font-weight: 500;
+      margin-top: 40px;
+      border-radius: 0 0 16px 16px;
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        INTERVIEW SESSION
-    </header>
+  <header>
+    INTERVIEW SESSION
+  </header>
 
-    <div class="main-content">
-        <div class="video-section">
-            <div id="video-container">
-                <video id="camera-feed" autoplay playsinline></video>
-            </div>
-            <div class="button-group">
-                <button id="record-button" class="button">Start Recording</button>
-                <form method="POST" action="{{ url_for('end_interview') }}">
-                    <button id="end-session-button" type="submit" class="button">End Interview</button>
-                </form>
-            </div>
-            <div id="thank-you-message">Thank you for completing the interview!</div>
-        </div>
-
-        <div class="questions-section">
-            <h2>Interview Questions</h2>
-            <div id="questions-container">
-                {% for question in questions %}
-                    <div class="question" data-question-index="{{ loop.index0 }}">{{ loop.index }}. {{ question }}</div>
-                {% endfor %}
-            </div>
-            <button id="next-questions-button" class="button">Next Questions</button>
-        </div>
+  <div class="main-content">
+    <div class="video-section">
+      <div id="video-container">
+        <video id="camera-feed" autoplay playsinline muted></video>
+      </div>
+      <div class="button-group">
+        <button id="record-button" class="button">Start Recording</button>
+        <form method="POST" action="{{ url_for('end_interview') }}">
+          <button id="end-session-button" type="submit" class="button">End Interview</button>
+        </form>
+      </div>
+      <div id="thank-you-message">Thank you for completing the interview!</div>
     </div>
 
+    <div class="questions-section">
+      <h2>Interview Questions</h2>
+      <div id="questions-container">
+        {% for question in questions %}
+          <div class="question" data-question-index="{{ loop.index0 }}">{{ loop.index }}. {{ question }}</div>
+        {% endfor %}
+      </div>
+      <button id="next-questions-button" class="button">Next Question</button>
+    </div>
+  </div>
 
-    <footer>
-        &copy; 2025 AI Interview Prep
-    </footer>
+  <footer>
+    &copy; 2025 AI Interview Prep
+  </footer>
 
-    <script>
-        const cameraFeed = document.getElementById('camera-feed');
-        const recordButton = document.getElementById('record-button');
-        const endSessionButton = document.getElementById('end-session-button');
-        const thankYouMessage = document.getElementById('thank-you-message');
-        const questionsContainer = document.getElementById('questions-container');
-        const questionElements = Array.from(questionsContainer.querySelectorAll('.question'));
-        const nextQuestionsButton = document.getElementById('next-questions-button');
-        const questionsSection = document.querySelector('.questions-section');
-        const totalQuestions = questionElements.length;
-        const questionsPerPage = 5;
-        let currentQuestionIndex = 0;
-        let recordingActive = false;
-        let mediaRecorder;
-        let recordedChunks = [];
-        let stream;
+  <script>
+    const cameraFeed = document.getElementById('camera-feed');
+    const recordButton = document.getElementById('record-button');
+    const endSessionButton = document.getElementById('end-session-button');
+    const thankYouMessage = document.getElementById('thank-you-message');
+    const questionsContainer = document.getElementById('questions-container');
+    const questionElements = Array.from(questionsContainer.querySelectorAll('.question'));
+    const nextQuestionsButton = document.getElementById('next-questions-button');
+    const totalQuestions = questionElements.length;
 
-        // Function to display the current set of questions
-        function showCurrentQuestions() {
-            questionElements.forEach((question, index) => {
-                if (index >= currentQuestionIndex && index < currentQuestionIndex + questionsPerPage) {
-                    question.classList.add('active');
-                } else {
-                    question.classList.remove('active');
-                }
+    let currentQuestionIndex = 0;
+    let recordingActive = false;
+    let mediaRecorder;
+    let recordedChunks = [];
+    let stream;
+
+    function showCurrentQuestion() {
+      questionElements.forEach((question, index) => {
+        question.classList.toggle('active', index === currentQuestionIndex);
+      });
+
+      if (currentQuestionIndex >= totalQuestions) {
+        nextQuestionsButton.style.display = 'none';
+        recordButton.style.display = 'none';
+        thankYouMessage.style.display = 'block';
+      }
+    }
+
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then(mediaStream => {
+        stream = mediaStream;
+        cameraFeed.srcObject = stream;
+        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9,opus' });
+
+        mediaRecorder.ondataavailable = event => {
+          if (event.data && event.data.size > 0) {
+            recordedChunks.push(event.data);
+          }
+        };
+
+        mediaRecorder.onstop = async () => {
+          const blob = new Blob(recordedChunks, { type: 'video/webm' });
+          recordedChunks = [];
+          const formData = new FormData();
+          formData.append('video_data', blob, `answer${currentQuestionIndex + 1}.webm`);
+
+          try {
+            const response = await fetch(`/save_video/${currentQuestionIndex + 1}`, {
+              method: 'POST',
+              body: formData
             });
+            if (!response.ok) {
+              alert('Failed to save the video.');
+            }
+          } catch (error) {
+            console.error('Error sending video:', error);
+            alert('An error occurred while sending the video.');
+          }
+          recordingActive = false;
+          recordButton.textContent = 'Start Recording';
+        };
 
-            // Show or hide the "Next Questions" button
-            if (currentQuestionIndex + questionsPerPage < totalQuestions) {
-                nextQuestionsButton.style.display = 'block';
+        recordButton.addEventListener('click', () => {
+          if (currentQuestionIndex < totalQuestions) {
+            if (!recordingActive) {
+              recordButton.textContent = 'Stop Recording...';
+              mediaRecorder.start();
+              recordingActive = true;
             } else {
-                nextQuestionsButton.style.display = 'none';
+              mediaRecorder.stop();
             }
-
-            // If all questions have been shown, you might want to hide the record button
-            if (currentQuestionIndex >= totalQuestions) {
-                recordButton.style.display = 'none';
-            }
-        }
-
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-            .then(mediaStream => {
-                stream = mediaStream;
-                cameraFeed.srcObject = stream;
-                mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9,opus' });
-
-                mediaRecorder.ondataavailable = event => {
-                    if (event.data && event.data.size > 0) {
-                        recordedChunks.push(event.data);
-                    }
-                };
-
-                mediaRecorder.onstop = async () => {
-                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                    recordedChunks = [];
-                    const formData = new FormData();
-                    formData.append('video_data', blob, `answer${currentQuestionIndex +1}.webm`); // Assuming saving per question
-
-                    try {
-                        const response = await fetch(`/save_video/${currentQuestionIndex + 1}`, { // Adjust endpoint if needed
-                            method: 'POST',
-                            body: formData
-                        });
-                        if (!response.ok) {
-                            alert('Failed to save the video.');
-                        }
-                    } catch (error) {
-                        console.error('Error sending video:', error);
-                        alert('An error occurred while sending the video.');
-                    }
-                    recordingActive = false;
-                    recordButton.textContent = 'Start Recording';
-                };
-
-                recordButton.addEventListener('click', () => {
-                    if (currentQuestionIndex < totalQuestions) {
-                        if (!recordingActive) {
-                            recordButton.textContent = 'Stop Recording...';
-                            mediaRecorder.start();
-                            recordingActive = true;
-                        } else {
-                            mediaRecorder.stop();
-                        }
-                    } else {
-                        alert('No more questions to record.');
-                    }
-                });
-
-                nextQuestionsButton.addEventListener('click', () => {
-                    currentQuestionIndex += questionsPerPage;
-                    showCurrentQuestions();
-                });
-
-                // Initial display of the first set of questions
-                showCurrentQuestions();
-            })
-            .catch(error => {
-                console.error('Error accessing media devices:', error);
-                alert('Please grant camera and microphone access.');
-            });
-
-
-
-        window.addEventListener('beforeunload', () => {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
+          }
         });
-    </script>
+
+        nextQuestionsButton.addEventListener('click', () => {
+          currentQuestionIndex++;
+          showCurrentQuestion();
+        });
+
+        showCurrentQuestion();
+      })
+      .catch(error => {
+        console.error('Error accessing media devices:', error);
+        alert('Please grant camera and microphone access.');
+      });
+
+    window.addEventListener('beforeunload', () => {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+    });
+  </script>
 </body>
 </html>
