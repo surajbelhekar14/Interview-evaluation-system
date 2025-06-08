@@ -14,7 +14,6 @@ from concurrent.futures import ThreadPoolExecutor # Import ThreadPoolExecutor
 app = Flask(__name__)
 app.secret_key = b'\x1c\x9a\x85\x01\x9b\x1d\xee\xa3\x16\x08\x9c\xa6\x8e\x19\x7d\x0f\x8f\xeb\x8f\x19\xfa\x99\xcd\x17'
 
-
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -34,7 +33,7 @@ global_language_tool = language_tool_python.LanguageTool('en-US')
 # Initialize a ThreadPoolExecutor for concurrent video processing
 # Adjust max_workers based on your system's CPU cores and expected load.
 # A common heuristic is the number of CPU cores or slightly more for I/O-bound tasks.
-executor = ThreadPoolExecutor(max_workers=4)
+executor = ThreadPoolExecutor(max_workers=1)
 
 # --- Helper Functions ---
 def extract_audio_from_video(video_file, output_audio_file):
@@ -279,9 +278,9 @@ def interview_page():
 
         selected_lines = []
         ranges = [
-            (5, 14),
-            (19, 28),
-            (33, 37)
+            (5, 8),
+            (13, 16),
+            (21,22)
         ]
 
         for start, end in ranges:
@@ -364,11 +363,19 @@ def calculate_confidence():
     avg_speaking_confidence = np.mean(speaking_confidences) if speaking_confidences else 0
     avg_facial_confidence = np.mean(facial_confidences) if facial_confidences else 0
     avg_grammar_score = np.mean(grammar_scores) if grammar_scores else 0
+    # Calculate weighted final aggregated score
+    WEIGHT_SPEAKING = 0.5
+    WEIGHT_FACIAL = 0.3
+    WEIGHT_GRAMMAR = 0.2
+
+    final_aggregated_score = (avg_speaking_confidence * WEIGHT_SPEAKING +
+                          avg_facial_confidence * WEIGHT_FACIAL +
+                          avg_grammar_score *WEIGHT_GRAMMAR )
     
     return render_template('results.html', candidate_name=candidate_name,
-                           speaking_confidence=f"{avg_speaking_confidence:.2f}",
-                           facial_confidence=f"{avg_facial_confidence:.2f}",
-                           grammar_score=f"{avg_grammar_score:.2f}")
-
+                       speaking_confidence=f"{avg_speaking_confidence:.2f}",
+                       facial_confidence=f"{avg_facial_confidence:.2f}",
+                       grammar_score=f"{avg_grammar_score:.2f}",
+                       final_aggregated_score=f"{final_aggregated_score:.2f}")
 if __name__ == '__main__':
     app.run(debug=True)

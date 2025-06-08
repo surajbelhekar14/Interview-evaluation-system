@@ -29,9 +29,9 @@ def generate_interview_questions(json_file_path='resume_output.json', output_fil
     # Create the prompt using the full JSON content
     prompt = f"""
         You are an AI interviewer for a technical interview. Based on the following resume data, generate:
-        1. 10 basic technical interview questions.
-        2. 10 advanced technical interview questions.
-        3. 5 HR interview questions related to the candidate's resume.
+        1. 4 basic technical interview questions.
+        2. 4 advanced technical interview questions.
+        3. 2 HR interview questions related to the candidate's resume.
         while giveing questions dont assign a serial no to that questions.
         extract only name of candidate and store it in first line of document directly as it is without any modification.  
         Resume Data:
