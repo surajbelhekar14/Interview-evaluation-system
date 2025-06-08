@@ -36,9 +36,9 @@
         }
 
         h2 {
-            font-family: 'Roboto Slab', serif;  /* Similar to subtitles */
+            font-family: 'Roboto Slab', serif; /* Similar to subtitles */
             font-size: 3.2em;
-            color: #34495e;  /* Dark heading color */
+            color: #34495e; /* Dark heading color */
             margin-top: 0;
             margin-bottom: 30px;
             font-weight: 700;
@@ -63,7 +63,7 @@
 
         .results-box h3 {
             font-size: 1.5em;
-            color: #e6a756;  /* Accent color */
+            color: #e6a756; /* Accent color */
             margin-bottom: 15px;
             font-family: 'Roboto Slab', serif; /* Use Roboto Slab for headings */
             font-weight: 600;
@@ -71,6 +71,14 @@
 
         .results-box p {
             margin-bottom: 12px;
+        }
+        .suggestions-list {
+            margin-left: 20px;
+            list-style-type: disc;
+        }
+        .suggestions-list li {
+            margin-bottom: 8px;
+            color: #555;
         }
     </style>
 </head>
@@ -82,8 +90,28 @@
             <p>Speaking Confidence: <strong>{{ speaking_confidence }}</strong> / 100</p>
             <p>Facial Confidence: <strong>{{ facial_confidence }}</strong> / 100</p>
             <p>Grammar Score: <strong>{{ grammar_score }}</strong> / 100</p>
+            <p><strong>Final Aggregated Score:</strong> {{ final_aggregated_score }}</p>
         </div>
-                <p><strong>Overall Interview Score: {{ final_aggregated_score }}%</strong></p>
-</div>
+
+        <div class="results-box">
+            <h3>Suggestions for Improvement</h3>
+            <ul class="suggestions-list">
+                {% if speaking_confidence|float < 70 %}
+                    <li>Practice speaking clearly and at a moderate pace to improve speaking confidence. Try recording yourself and listening back.</li>
+                {% endif %}
+                {% if facial_confidence|float < 70 %}
+                    <li>Work on maintaining eye contact and using natural facial expressions to convey confidence and engagement.</li>
+                {% endif %}
+                {% if grammar_score|float < 70 %}
+                    <li>Review common grammar rules and practice constructing clear and concise sentences. Reading aloud can also help.</li>
+                {% endif %}
+                {% if final_aggregated_score|float < 75 %}
+                    <li>Focus on areas where your scores are lower. Consistent practice in those specific aspects will lead to overall improvement.</li>
+                {% else %}
+                    <li>Excellent work! Keep practicing to maintain your high level of confidence and proficiency.</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
 </body>
 </html>
